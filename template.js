@@ -6,7 +6,7 @@ export default () => {
                 <title>MERN Skeleton</title>
             </head>
             <body>
-                <div id="root">Hello World</div>
+                <div id="root">Hello World!!</div>
             </body>
-        </html>`
-}
+        </html>`;
+};
