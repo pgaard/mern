@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import crypto from "crypto";
+
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -29,6 +31,9 @@ UserSchema.virtual("password")
         this._password = password;
         this.salt = this.makeSalt();
         this.hashed_password = this.encryptPassword(password);
+        console.log(
+            "setting password:" + password + "hashed:" + this.hashed_password
+        );
     })
     .get(function () {
         return this._password;
@@ -55,6 +60,7 @@ UserSchema.methods = {
                 .update(password)
                 .digest("hex");
         } catch (err) {
+            console.log("encrypt error" + JSON.stringify(err));
             return "";
         }
     },

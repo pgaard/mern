@@ -4,6 +4,7 @@ import errorHandler from "./../helpers/dbErrorHandler";
 
 const create = async (req, res) => {
     // new mogoose model from the json in the body of the request
+    console.log("in create " + JSON.stringify(req.body));
     const user = new User(req.body);
     try {
         // mogoose save method
@@ -38,11 +39,12 @@ const userByID = async (req, res, next, id) => {
 const read = (req, res) => {
     req.profile.hashed_password = undefined;
     req.profile.salt = undefined;
-    return res.json(req.profile);
+    return res.json(req.profile); // put user object as json in the response
 };
 
 const list = async (req, res) => {
     try {
+        // load all and get these 4 fields only
         let users = await User.find().select("name email updated created");
         res.json(users);
     } catch (err) {
@@ -55,7 +57,7 @@ const list = async (req, res) => {
 const update = async (req, res) => {
     try {
         let user = req.profile;
-        user = extend(user, req.body);
+        user = extend(user, req.body); // merge fields from request
         user.updated = Date.now();
         await user.save();
         user.hashed_password = undefined;
