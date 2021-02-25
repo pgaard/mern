@@ -19,7 +19,7 @@ const getUniqueErrorMessage = (err) => {
     return output;
 };
 
-// Get the error message from error object
+// Get the error message from mongoose error object
 const getErrorMessage = (err) => {
     let message = "";
 
