@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
-
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -24,6 +23,16 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    about: {
+        type: String,
+        trim: true,
+    },
+    photo: {
+        data: Buffer,
+        contentType: String,
+    },
+    following: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+    followers: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
 });
 
 UserSchema.virtual("password")
@@ -31,9 +40,6 @@ UserSchema.virtual("password")
         this._password = password;
         this.salt = this.makeSalt();
         this.hashed_password = this.encryptPassword(password);
-        console.log(
-            "setting password:" + password + "hashed:" + this.hashed_password
-        );
     })
     .get(function () {
         return this._password;
@@ -60,7 +66,6 @@ UserSchema.methods = {
                 .update(password)
                 .digest("hex");
         } catch (err) {
-            console.log("encrypt error" + JSON.stringify(err));
             return "";
         }
     },

@@ -3,6 +3,7 @@ import { signout } from "./api-auth.js";
 const auth = {
     // authenticaed if a jwt exists
     isAuthenticated() {
+        console.log("isAuthenticated " + sessionStorage.getItem("jwt"));
         if (typeof window == "undefined") return false;
 
         if (sessionStorage.getItem("jwt"))

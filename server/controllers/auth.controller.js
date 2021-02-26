@@ -1,14 +1,14 @@
+import User from "../models/user.model";
 import jwt from "jsonwebtoken";
 import expressJwt from "express-jwt";
 import config from "./../../config/config";
-import User from "../models/user.model";
 
 const signin = async (req, res) => {
-    console.log("signin req " + req.body.email + " " + req.body.password);
-    try {        
+    try {
         let user = await User.findOne({
             email: req.body.email,
         });
+
         if (!user)
             return res.status("401").json({
                 error: "User not found",
@@ -33,14 +33,10 @@ const signin = async (req, res) => {
 
         return res.json({
             token,
-            user: {
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-            },
+            user: { _id: user._id, name: user.name, email: user.email },
         });
     } catch (err) {
-        console.log("error!" + JSON.stringify(err));
+        console.log(err);
         return res.status("401").json({
             error: "Could not sign in",
         });
@@ -57,7 +53,7 @@ const signout = (req, res) => {
 const requireSignin = expressJwt({
     secret: config.jwtSecret,
     userProperty: "auth",
-    algorithms: ["RS256"],
+    algorithms: ['sha1', 'RS256', 'HS256'],
 });
 
 const hasAuthorization = (req, res, next) => {
